@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言在上两个章节中，已经对自行建立Framework工程作为组建工程的方式进行说明，已经实现了组件化，但也有一些局限性。这篇文章在其基础上再一次进行组件化探讨，并从保证调试便利、提高实际开发效率和增强扩展性等方面进行考虑，最后选择了 使用Pod打包Framework 的方式进行组件化，使用了简单的脚本配置工程和发布Pod。">
+<meta name="keywords" content="组件化,Cocoapods">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cocoapods实现iOS组件化之Pod打包Framework方式">
+<meta property="og:url" content="https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/index.html">
+<meta property="og:site_name" content="Nevermore&#39;s Blog">
+<meta property="og:description" content="前言在上两个章节中，已经对自行建立Framework工程作为组建工程的方式进行说明，已经实现了组件化，但也有一些局限性。这篇文章在其基础上再一次进行组件化探讨，并从保证调试便利、提高实际开发效率和增强扩展性等方面进行考虑，最后选择了 使用Pod打包Framework 的方式进行组件化，使用了简单的脚本配置工程和发布Pod。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_1_34_23.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_2_37_26.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_3_09_07.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-24_9_41_57.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_11_59_08.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_10_26_11.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_48_43.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_45_02.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_47_31.png">
+<meta property="og:updated_time" content="2019-04-01T08:56:08.423Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocoapods实现iOS组件化之Pod打包Framework方式">
+<meta name="twitter:description" content="前言在上两个章节中，已经对自行建立Framework工程作为组建工程的方式进行说明，已经实现了组件化，但也有一些局限性。这篇文章在其基础上再一次进行组件化探讨，并从保证调试便利、提高实际开发效率和增强扩展性等方面进行考虑，最后选择了 使用Pod打包Framework 的方式进行组件化，使用了简单的脚本配置工程和发布Pod。">
+<meta name="twitter:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_1_34_23.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Cocoapods实现iOS组件化之Pod打包Framework方式 | Nevermore's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Nevermore's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">No time to waste</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Nevermore">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nevermore's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Cocoapods实现iOS组件化之Pod打包Framework方式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-25 10:10:33" itemprop="dateCreated datePublished" datetime="2019-03-25T10:10:33+08:00">2019-03-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-01 16:56:08" itemprop="dateModified" datetime="2019-04-01T16:56:08+08:00">2019-04-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上两个章节中，已经对<strong><code>自行建立Framework工程</code></strong>作为组建工程的方式进行说明，已经实现了组件化，但也有一些局限性。这篇文章在其基础上再一次进行组件化探讨，并从保证调试便利、提高实际开发效率和增强扩展性等方面进行考虑，最后选择了 <strong><code>使用Pod打包Framework</code></strong> 的方式进行组件化，使用了简单的脚本配置工程和发布Pod。</p>
+<a id="more"></a>
+<p>开始之前先说一下将要进行组件化的工程的开发情况，目前工程已经经历了2年的开发期，一直采用Swift和OC混编开发，其中Swift和OC基本各占一半，也有将开发代码逐渐全部转化成Swift的想法。组件化最主要的工作是各模块的解耦，使他们成为一个独立的应用，可以独立运行，也可以和其他工程结合成一个新应用。这将面临两个问题：</p>
+<ul>
+<li>如何将组件整合在一起更有利于开发、调试、打包、发布的流程。</li>
+<li>如何保证组件工程和其他工程对接时的低耦合性。</li>
+</ul>
+<p>下面的内容将基于将要进行组件化的工程、围绕解决上述问题进行说明，实现一套组件开发和使用的方法。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="本地多Git账号配置"><a href="#本地多Git账号配置" class="headerlink" title="本地多Git账号配置"></a>本地多Git账号配置</h3><h4 id="Git多账号配置步骤"><a href="#Git多账号配置步骤" class="headerlink" title="Git多账号配置步骤"></a>Git多账号配置步骤</h4><p>一般在初次安装Git后，会使用如下的命令配置全局用户名和邮箱：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"xxx"</span> // 配置全局用户名，如Github上注册的用户名</span><br><span class="line">$ git config --global user.email <span class="string">"yyy@mail.com"</span> // 配置全局邮箱，如Github上配置的邮箱</span><br></pre></td></tr></table></figure>
+<p>这个–global选项，是指这里配置的user.name和user.email是相对于全局进行配置的，即不同的Git仓库默认的用户名和邮箱都是这个值。由于需要管理多个账户，所以仅仅使用这个全局值是不够的，需要在每个仓库中单独配置。</p>
+<p><strong>1、打开终端，清除全局Git账户配置。</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global --<span class="built_in">unset</span> user.name</span><br><span class="line">$ git config --global --<span class="built_in">unset</span> user.email</span><br></pre></td></tr></table></figure>
+<p><strong>2、进入 <code>~/.ssh</code> 对每个GitHub账户生成一对密匙。</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 进入目录，该目录下保存生成的秘钥</span><br><span class="line">$ <span class="built_in">cd</span> ~/.ssh </span><br><span class="line"></span><br><span class="line">//根据账户邮箱生成秘钥</span><br><span class="line">$ ssh-keygen -t rsa -C <span class="string">"*********@163.com"</span></span><br></pre></td></tr></table></figure>
+<p>按命令执行完成之后，在<code>~/.ssh</code>下会看到刚刚自己命名创建的两个密匙文件，一个公匙、一个私匙。</p>
+<p>同样，对于另一个GitHub上的账户，按照同样的步骤生成一对新的秘钥文件。接下来的步骤，两个账户的操作完全相同。</p>
+<p><strong>3、将私匙添加到本地</strong></p>
+<p>SSH协议的原理，就是在托管网站上使用公钥，在本地使用私钥，这样本地仓库就可以和远程仓库进行通信。在上一步已经生成了秘钥文件，接下来需要使用秘钥文件，首先是在本地使用秘钥文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 将GitHub私钥添加到本地</span><br><span class="line">$ ssh-add ~/.ssh/&lt;私匙文件1&gt; </span><br><span class="line">$ ssh-add ~/.ssh/&lt;私匙文件2&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用<code>ssh-add -l</code>命令查看添加过的私匙文件</p>
+</blockquote>
+<p><strong>4、对本地秘钥进行配置</strong></p>
+<p>由于添加了多个密钥文件，所以需要对这多个密钥进行管理。在.ssh目录下新建一个config文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh </span><br><span class="line">$ touch config</span><br></pre></td></tr></table></figure>
+<p>文件内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#github ***************@163.com</span></span><br><span class="line">    host bigboss 				</span><br><span class="line">    Hostname github.com	</span><br><span class="line">    User BigBoss666</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment">#github bakwisdomschool@163.com</span></span><br><span class="line">    host wisdomschool  		</span><br><span class="line">    Hostname github.com 	</span><br><span class="line">    User BakWisdomSchool 	</span><br><span class="line">    IdentityFile ~/.ssh/ws_id_rsa</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>host</strong> 是托管服务器的别名，随便取，很重要，后面会用到；</p>
+<p><strong>Hostname</strong> 是托管服务器名，我们托管在GitHub下，服务器名是 <code>github.com</code> ；</p>
+<p><strong>User</strong> 是GitHub用户名</p>
+<p><strong>IdentityFile</strong> 是私匙的路径</p>
+</blockquote>
+<p><strong>5、公钥添加到托管网站</strong></p>
+<p>以GitHub为例，进入<code>~/.ssh</code>目录，复制公匙文件内容。</p>
+<p>登录GitHub，点击右上角头像选择settings，在打开的页面中选择<strong>SSH and GPG keys</strong>，新建一个<strong>SSH key</strong>，将公匙内容粘贴在key中。</p>
+<p><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_1_34_23.png" alt="2019-03-25_1_34_23"></p>
+<p>至此，托管网站的公钥添加完成。总结来说，就是针对每个托管网站分别生成一对密钥，然后分别添加到本地和托管网站。</p>
+<p>现在，可以测试一下配置是否成功，测试命令使用别名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@&lt;github服务器别名&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Git多账号使用"><a href="#Git多账号使用" class="headerlink" title="Git多账号使用"></a>Git多账号使用</h4><p>在拉取和关联远程仓库时，用到的SSH Url，需要将其中的GitHub服务器名换成GitHub服务器别名。如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 拉取远程仓库到本地</span><br><span class="line">$ git <span class="built_in">clone</span> git@&lt;github服务器别名&gt;:******/***.git </span><br><span class="line"></span><br><span class="line">// 关联远程仓库和本地</span><br><span class="line">$ git remote add origin git@&lt;github服务器别名&gt;:******/***.git</span><br></pre></td></tr></table></figure>
+<p>按上述步骤完成配置以后，多账号就可以自动切换了。</p>
+<h3 id="Xcode工程自动配置文件创建"><a href="#Xcode工程自动配置文件创建" class="headerlink" title="Xcode工程自动配置文件创建"></a>Xcode工程自动配置文件创建</h3><h4 id="配置文件说明"><a href="#配置文件说明" class="headerlink" title="配置文件说明"></a>配置文件说明</h4><p>为了提高开发效率，可以创建一些配置文件和模板来配置Xcode工程和发布Pod库。</p>
+<p>这里已经创建好了一个 <strong><code>ConfigPod</code></strong> 仓库，其中包含一个  <em>config.sh</em> 文件和一个 <strong>templates</strong> 文件夹。<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_2_37_26.png" alt="2019-03-25_2_37_26"></p>
+<blockquote>
+<p><em>config.sh</em>：运行这个文件会对新建的<strong>Xcode组件工程</strong>进行一系列配置，包括：git的初始化和关联远程仓库、将<code>templates</code>中模板文件正对当前Xcode组件工程进行对应修改后复制到Xcode组件工程的相应路径下。</p>
+<p><em>pod.podspec</em>：Xcode组件工程的podspec文件模板，此配置用于将工程打包成Pod组件和发布</p>
+<p><em>Podfile</em>：Xcode组件工程的Podfile文件模板，组件使用Pod第三方库的配置文件</p>
+<p><em>gitignore</em>：自定义gitignore，覆盖工程中的.gitignore，添加git忽略的文件</p>
+<p><em>upload.sh</em>：<strong>自动发布组件工程Pod的脚本，在完成所有开发和测试，发布Pod组件时使用</strong></p>
+<p><em>readme.md</em>：自定义readme.md，覆盖工程中的readme.md</p>
+<p><em>FILE_LICENSE</em>：自定义FILE_LICENSE，覆盖工程中的LICENSE</p>
+</blockquote>
+<h4 id="ConfigPod使用"><a href="#ConfigPod使用" class="headerlink" title="ConfigPod使用"></a>ConfigPod使用</h4><p>将 <strong><code>ConfigPod</code></strong> 拉取一份在本地，必须和将要进行配置的Xcode组件工程放在同一级路径下，使用终端进入ConfigPod中，执行 <code>./config.sh</code>，然后按照提示完成配置。</p>
+<p>完成配置后可以进入Xcode组件工程查看，后续可以根据自己的需求修改这些文件。</p>
+<h2 id="Pod组件工程搭建"><a href="#Pod组件工程搭建" class="headerlink" title="Pod组件工程搭建"></a>Pod组件工程搭建</h2><h3 id="Pod调试模式组件工程搭建"><a href="#Pod调试模式组件工程搭建" class="headerlink" title="Pod调试模式组件工程搭建"></a>Pod调试模式组件工程搭建</h3><p>为了便于自定义，在了解了Pod创建库文件之后，选择自行手动进行Pod库的创建和关联。步骤如下：</p>
+<p>1、先登录GitHub账户，创建一个仓库 <strong>iOSSpecsRepo</strong>，作为我们私有Pod的源仓库。再将其放置在cocoapods管理的仓库下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pod repo add iOSSpecsRepo https://github.com/********/iOSSpecsRepo.git</span><br></pre></td></tr></table></figure>
+<p>2、创建一个<code>Project</code>文件夹，从远程库拉取之前做好的ConfigPod仓库到Project里面。</p>
+<ul>
+<li>将ConfigPod的template文件夹下Podfile中的 source ‘<a href="https://github.com/BakWisdomSchool/ConfigPod.git&#39;" target="_blank" rel="noopener">https://github.com/BakWisdomSchool/ConfigPod.git&#39;</a> 改成第一步里面你自己的私有Pod源仓库的repo地址</li>
+<li>将ConfigPod的template文件夹下 <em>upload.sh</em> 中<code>PrivatePods</code>改成第二步里面你自己的私有Pod源仓库的名字<code>iOSSpecsRepo</code></li>
+</ul>
+<p>3、在<code>Project</code>中使用Xcode创建组件化主工程 <strong><code>ModulizedWisdomSchool</code></strong>，终端进入主工程，执行<code>pod init</code>初始化Pod，生成Podfile文件；在GitHub新建一个Repo，命名也是ModulizedWisdomSchool，将其和本地主工程关联起来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 进入ModulizedWisdomSchool</span><br><span class="line">$ <span class="built_in">cd</span> ../ModulizedWisdomSchool</span><br><span class="line"></span><br><span class="line">// git 初始化</span><br><span class="line">$ git init </span><br><span class="line"></span><br><span class="line">// 关联远程仓库和本地</span><br><span class="line">$ git remote add origin git@&lt;github服务器别名&gt;:******/***.git</span><br><span class="line"></span><br><span class="line">// 拉取远程分支到本地合并</span><br><span class="line">$ git pull origin master</span><br><span class="line"></span><br><span class="line">// 上传本地工程到远程仓库</span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"第一次上传"</span></span><br><span class="line">$ git push origin master</span><br></pre></td></tr></table></figure>
+<p><strong>注意：SSH Repo中的GitHub服务器地址使用本地配置好的GitHub服务器别名。</strong></p>
+<p>4.1、新建Xcode工程<strong><code>WSEducation</code></strong>，放到Projects下；在GitHub新建一个Repo，命名也是WSEducation，新建好之后网页不要关闭。</p>
+<p>4.2、在终端cd到<code>ConfigPod</code>中，执行<code>./config.sh</code>脚本来配置<strong><code>WSEducation</code></strong> 这个组件工程，脚本会问你要一些信息，Project Name就是WSEducation，要跟你的WSEducation工程的目录名一致。HTTPS Repo、SSH Repo从刚才的GitHub网页上获取，Home Page URL就填个人GitHub主页的URL就好。<strong>同样注意：</strong>SSH Repo中的GitHub服务器地址使用本地配置好的GitHub服务器别名。**</p>
+<p>完成配置后的工程路径如下：<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_3_09_07.png" alt="2019-03-25_3_09_07"></p>
+<blockquote>
+<p><strong>配置内容：</strong></p>
+<p>工程进行了git初始化和关联远程分支；</p>
+<p>将模板文件针对当前工程进行相应修改，并复制到了一级子路径下；</p>
+<p>在二级路径下创建了两个文件夹：<strong>WSEducation</strong> 和 <strong>Frameworks</strong>。这是我们为了开发自行配置的：<strong>WSEducation</strong> 存放此工程将被打包成Pod库的源文件和资源内容；<strong>Frameworks</strong> 存放 <strong>WSEducation</strong> 路径下的内容打包成的二进制库文件。这两个路径会被分情况设置在podspec文件中，下面的<em>PodSpec文件说明</em>会详细讲解。</p>
+</blockquote>
+<p>5、参照4.1-4.2，在Project下分别创建Xcode工程 <strong><code>WSEducation_Extension</code></strong> 和 <strong><code>WSHelpers</code></strong>，并使用脚本<code>./config.sh</code>进行配置。</p>
+<p>完成之后，Project中内容如下：<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-24_9_41_57.png" alt="2019-03-24_9_41_57"></p>
+<blockquote>
+<p><strong><code>ModulizedWisdomSchool</code></strong>：应用的主工程，用来管理各个组件。</p>
+<p><strong><code>WSEducation</code></strong>、<strong><code>WSHelpers</code></strong>：功能组件工程。</p>
+<p><strong><code>WSEducation_Extension</code></strong>：组件对接工程，它是用来对接 <strong><code>WSEducation</code></strong> 组件，主工程使用<strong><code>WSEducation</code></strong> 组件时不需要依赖它，只需要依赖它的对接组件。这样一来，就解除了组件和主工程的耦合。</p>
+</blockquote>
+<p>6、编辑主工程 <strong><code>ModulizedWisdomSchool</code></strong> 中的Podfile文件，在其中指定组件工程的路径，建立本地组件关联。<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_11_59_08.png" alt="2019-03-25_11_59_08"></p>
+<p>cd进主工程，执行<code>pod install</code>，实现本地组件关联。打开<strong>WSEducation.xcworkspace</strong> 文件查看，当前工程Xcode目录如下。<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_10_26_11.png" alt="2019-03-25_10_26_11"></p>
+<ul>
+<li>可以看到，在主工程 <strong><code>ModulizedWisdomSchool</code></strong> 的Pods工程中的本地开发Pod库 <strong>Development Pods</strong> 下面，已经将刚才关联的3个组件工程打包成了本地的Pod库，每个Pod库中的内容是由对应组件工程中的podspec文件配置，详细内容<em>PodSpec文件说明</em>讲解。<strong>现在可以在这里直接编辑和开发调试，当组件调试完成发布到Cocoapods之后，去掉这里的组件工程本地路径再<code>pod install</code>即可切换为使用远程组件Pod。</strong></li>
+<li>在Pod库的 <strong>Pod</strong> 路径下有对应组件工程中的podspec文件，可在这里按实际需求更改，每次更改了组件工程的podspec文件内容后，终端在主工程下执行<code>pod install</code>即可更新工程结构。</li>
+</ul>
+<p>到这里为止，我们已经将Pod调试模式组件工程搭建好。一方面，组件工程可以作为一个应用独立运行；另一方面，主工程也可以使用组件工程生成的Pod组件，在主工程中对组件工程进行编辑和调试。</p>
+<p>但这只是刚刚搭建好整体框架，还有更多的使用方法和细节说明在后面继续讲解。</p>
+<h2 id="Pod组件工程说明和使用"><a href="#Pod组件工程说明和使用" class="headerlink" title="Pod组件工程说明和使用"></a>Pod组件工程说明和使用</h2><h3 id="PodSpec文件说明"><a href="#PodSpec文件说明" class="headerlink" title="PodSpec文件说明"></a>PodSpec文件说明</h3><p>在主工程路径下执行<code>pod install</code>之后会将本地主工程和组件工程关联起来是因为Podfile文件中进行了本地调试工程路径定义，而关联内容是由对应组件工程中的podspec文件定义的：</p>
+<ul>
+<li><em>podspec</em> 文件中的参数 <strong>swift_version</strong>：podspec文件如果需要指定swift版本，版本不正确swift编译可能报错</li>
+<li><em>podspec</em> 文件中的参数 <strong>source_files</strong>：指定Pod库源文件路径，路径下的内容会显示在主工程的 <code>Pods - Development Pods - &lt;组件Pod库&gt;</code> 路径下。</li>
+<li><em>podspec</em> 文件中的参数 <strong>vendored_frameworks</strong>：指定Pod库依赖的本地framework路径，路径下的内容会显示在主工程的 <code>Pods - Development Pods - &lt;组件Pod库&gt; - Frameworks</code> 路径下。</li>
+<li><em>podspec</em> 文件中的参数 <strong>resource_bundles</strong>：指定Pod库包含的资源文件路径，路径下的内容会显示在主工程的 <code>Pods - Development Pods - &lt;组件Pod库&gt; - Resources</code> 路径下。</li>
+<li><em>podspec</em> 文件中的参数 <strong>resources</strong>：也是用来配置Pod中的资源文件的，其配置的路径下的内容会显示在主工程的 <code>Pods - Development Pods - &lt;组件Pod库&gt; - Resources</code> 路径下。但这种配置方式和使用 <strong>resource_bundles</strong> 进行配置有很大区别，后面的内容会进行说明。</li>
+<li><em>podspec</em> 文件中的参数 <strong>dependency</strong>：指定此Pod库依赖的其他远程Pod库，形成关联关系，安装当前Pod库时Cocoapods会自动安装其依赖的其他远程Pod库。</li>
+</ul>
+<p>简单来说，Xcode可以使用其中的配置信息将指定路径下的内容打包成为库文件，然后发布到Cocoapods服务器，使其成为远程Pod库。它有很多配置参数，上面已经对几个重要参数进行说明，其他参数信息可以去<a href="https://guides.cocoapods.org/syntax/podspec.html" target="_blank" rel="noopener">Podspec Syntax Reference</a>查看。</p>
+<p>下面是 <strong><code>ConfigPod</code></strong> 中写好的podspec模板，其中对基本应用需要的参数进行了配置和说明，实际开发中要灵活运用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Be sure to run `pod spec lint __ProjectName__.podspec' to ensure this is a</span></span><br><span class="line"><span class="comment">#  valid spec and to remove all comments including this before submitting the spec.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  To learn more about Podspec attributes see https://docs.cocoapods.org/specification.html</span></span><br><span class="line"><span class="comment">#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">Pod::Spec.new <span class="keyword">do</span> |spec|</span><br><span class="line">  </span><br><span class="line"><span class="comment"># ======  基本参数  =================================================================================== #</span></span><br><span class="line">  spec.name         = <span class="string">"__ProjectName__"</span>               <span class="comment"># Pod名称</span></span><br><span class="line">  spec.version      = <span class="string">"1"</span>                      <span class="comment"># Pod版本</span></span><br><span class="line">  spec.summary      = <span class="string">"__ProjectName__"</span></span><br><span class="line">  spec.description      = &lt;&lt;-DESC</span><br><span class="line">  this is __ProjectName__</span><br><span class="line">  DESC</span><br><span class="line"></span><br><span class="line">  spec.homepage     = <span class="string">"https://github.com/BakWisdomSchool"</span></span><br><span class="line">  </span><br><span class="line">  spec.license      = &#123; :<span class="built_in">type</span> =&gt; <span class="string">"MIT"</span>, :file =&gt; <span class="string">"FILE_LICENSE"</span> &#125;</span><br><span class="line">  </span><br><span class="line">  spec.author       = &#123; <span class="string">"BakWisdomSchool"</span> =&gt; <span class="string">"bakwisdomschool@163.com"</span> &#125;</span><br><span class="line">  </span><br><span class="line">  spec.platform     = :ios, <span class="string">"9.0"</span></span><br><span class="line">  </span><br><span class="line">  spec.source       = &#123; :git =&gt; <span class="string">"https://github.com/BakWisdomSchool/__ProjectName__.git"</span>, :tag =&gt; spec.version.to_s &#125;</span><br><span class="line">  </span><br><span class="line">  spec.requires_arc = <span class="literal">true</span></span><br><span class="line">  </span><br><span class="line">  spec.swift_version = <span class="string">"5.0"</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># ======  发布源文件包Pod的方式  ================================================================================ #</span></span><br><span class="line">  <span class="comment"># source_files包含的所有文件会被发布到Cocoapods中，引用的人可以看到这些文件。</span></span><br><span class="line">  <span class="comment"># "/**/" 表示所有子文件夹，“*.&#123;文件后缀&#125;” 代表所有符合后缀名的文件，文件路径是基于podspec文件的</span></span><br><span class="line">  spec.source_files  = <span class="string">"__ProjectName__/__ProjectName__/**/*.&#123;h,m,swift&#125;"</span></span><br><span class="line"></span><br><span class="line">  spec.resource_bundles = &#123;</span><br><span class="line">    <span class="string">'__ProjectName__Res'</span> =&gt; [<span class="string">'__ProjectName__/__ProjectName__/__ProjectName__.xcassets'</span>, <span class="string">'__ProjectName__/__ProjectName__/**/*.&#123;xib&#125;'</span>]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ====== 发布二进制包Pod的方式  ================================================================================ #</span></span><br><span class="line"><span class="comment">#  # 将Pod库打包成的framework依赖起来，再发送</span></span><br><span class="line"><span class="comment">#  spec.vendored_frameworks = "Products/__ProjectName__.framework"</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># ======  Pod依赖的本地库  ================================================================================= #</span></span><br><span class="line"><span class="comment">#  # pod依赖的本地framework</span></span><br><span class="line"><span class="comment">#  spec.vendored_frameworks = "__ProjectName__/Frameworks/**/*.&#123;framework&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#  # pod依赖的本地libraries</span></span><br><span class="line"><span class="comment">#  spec.vendored_library = "__ProjectName__/Frameworks/**/*.&#123;a&#125;"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 保护不被删除的文件</span></span><br><span class="line">  spec.preserve_paths = <span class="string">"__ProjectName__/Frameworks/**/*.&#123;framework, a&#125;"</span>, <span class="string">"Products/__ProjectName__.framework"</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># ======  Pod依赖的第三Pod方库  ================================================================================ #</span></span><br><span class="line">  <span class="comment"># pod依赖的第三方库</span></span><br><span class="line"><span class="comment">#  spec.dependency "JSONKit", "~&gt; 1.4"</span></span><br><span class="line"><span class="comment">#  spec.dependency "CTMediator"</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># ======  Pod依赖的系统库  ================================================================================= #</span></span><br><span class="line"><span class="comment">#  # pod依赖的苹果的framework，比如UIKit，SystemConfiguration等等</span></span><br><span class="line"><span class="comment">#  spec.framework  = "SomeFramework"</span></span><br><span class="line"><span class="comment">#  spec.frameworks = "SomeFramework", "AnotherFramework"</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  # pod依赖的苹果官方的库，也就是类似libstdc++.a ,libsqlite.a 等等的a文件</span></span><br><span class="line"><span class="comment">#  spec.library   = "iconv"</span></span><br><span class="line"><span class="comment">#  spec.libraries = "iconv", "xml2"</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment"># ======  定义subspec  ===================================================================================== #</span></span><br><span class="line"><span class="comment">#  spec.subspec 'AA' do |aa|</span></span><br><span class="line"><span class="comment">#    aa.source_files = '__ProjectName__/__ProjectName__/AA/**/*.&#123;h,m,swift&#125;'</span></span><br><span class="line"><span class="comment">#  end</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  spec.subspec 'BB' do |bb|</span></span><br><span class="line"><span class="comment">#    bb.source_files = '__ProjectName__/__ProjectName__/BB/**/*.&#123;h,m,swift&#125;'</span></span><br><span class="line"><span class="comment">#    bb.dependency 'SnapKit'          依赖外部Pod库</span></span><br><span class="line"><span class="comment">#    bb.dependency '__ProjectName__/AA'   依赖内部的库</span></span><br><span class="line"><span class="comment">#  end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ======  定义脚本  ======================================================================================== #</span></span><br><span class="line"><span class="comment"># 添加将真机Framework移动到工程路径下的Products中的脚本</span></span><br><span class="line">spec.script_phase = </span><br><span class="line">&#123; </span><br><span class="line">:name =&gt; <span class="string">'Copy Device Framework'</span>,             <span class="comment">#脚本b名字</span></span><br><span class="line"></span><br><span class="line">:script =&gt;                            <span class="comment">#脚本内容</span></span><br><span class="line"><span class="string">'#!/bin/bash</span></span><br><span class="line"><span class="string">if [ "$&#123;ACTION&#125;" = "build" ]</span></span><br><span class="line"><span class="string">then</span></span><br><span class="line"><span class="string">INSTALL_DIR=../../$&#123;TARGET_NAME&#125;/Products</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">DEVICE_DIR=$&#123;BUILD_ROOT&#125;/$&#123;CONFIGURATION&#125;-iphoneos/$&#123;TARGET_NAME&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">if [ -d "$&#123;INSTALL_DIR&#125;" ]</span></span><br><span class="line"><span class="string">then</span></span><br><span class="line"><span class="string">rm -rf "$&#123;INSTALL_DIR&#125;"</span></span><br><span class="line"><span class="string">fi</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">mkdir -p "$&#123;INSTALL_DIR&#125;"</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">if [ -d "$&#123;DEVICE_DIR&#125;/$&#123;TARGET_NAME&#125;.framework" ]</span></span><br><span class="line"><span class="string">then</span></span><br><span class="line"><span class="string">cp -R "$&#123;DEVICE_DIR&#125;/$&#123;TARGET_NAME&#125;.framework" "$&#123;INSTALL_DIR&#125;/$&#123;TARGET_NAME&#125;.framework"</span></span><br><span class="line"><span class="string">fi</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#open "$&#123;INSTALL_DIR&#125;"</span></span><br><span class="line"><span class="string">#open "$&#123;DEVICE_DIR&#125;"</span></span><br><span class="line"><span class="string">fi'</span>, </span><br><span class="line"></span><br><span class="line">:execution_position =&gt; :after_compile   <span class="comment">#编译完成后执行</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>基本参数配置：</strong> podspec的基本信息，这里要注意 <strong>spec.version</strong> 需要和发布Pod时git tag的版本一致，在工程中的发布脚本 <em>upload.sh</em> 中已经进行了相关的处理。</li>
+<li><strong>Pod依赖的系统库</strong> 和 <strong>Pod依赖的第三方库：</strong> 按实际情况配置</li>
+<li><strong>发布源文件包的方式</strong> 和 <strong>发布二进制包的方式：</strong> 这两种配置选择一种，是对发布出去的Pod库内容的控制。以<strong>源文件包</strong>的方式发布的话，这个Pod库中包含了所有源文件和资源，引用这个远程Pod库时可以看到这些源文件和资源；以<strong>二进制包</strong>的方式发布的话，这个Pod库中包含了一个二进制文件（iOS推荐用Framework），引用这个远程Pod库时只能看到自己主动暴露出来的公共头文件。</li>
+<li><strong>定义subspec：</strong> 定义此Pod的子模块，对工具类Pod等有很多不同功能的Pod库有好处，使用时只需要引用Pod中需要的部分。</li>
+</ul>
+<h3 id="Pod组件中Swift和OC混编"><a href="#Pod组件中Swift和OC混编" class="headerlink" title="Pod组件中Swift和OC混编"></a>Pod组件中Swift和OC混编</h3><h4 id="pod中Swift如何引用OC文件"><a href="#pod中Swift如何引用OC文件" class="headerlink" title="pod中Swift如何引用OC文件"></a>pod中Swift如何引用OC文件</h4><ul>
+<li>单个工程开发中，Swift引用OC需要添加桥接文件 <em>ProductName-BridgingHeader.h</em> ，然后在桥接文件中导入OC类的头文件即可。添加桥接文件的方式Google。</li>
+<li>在Pod的库中，Swift引用OC文件是不需要桥接文件的，因为Pod库会自动生成 <em>ProductName-umbrella.h</em> 文件，Swift可以直接饮用OC文件。</li>
+</ul>
+<h4 id="pod中OC如何引用Swift文件"><a href="#pod中OC如何引用Swift文件" class="headerlink" title="pod中OC如何引用Swift文件"></a>pod中OC如何引用Swift文件</h4><ul>
+<li>单个工程开发中，OC引用Swift只需要引用Swift类的头文件即可：<code>#import &quot;ProductName-Swift.h&quot;</code>。</li>
+<li>在Pod的库中，OC引用Swift文件也需要引用Swift类的头文件，但需要带上Pod的Module：<code>#import &lt;ProductModuleName/ProductName-Swift.h&gt;</code>。</li>
+</ul>
+<h3 id="Pod组件中资源引入方式"><a href="#Pod组件中资源引入方式" class="headerlink" title="Pod组件中资源引入方式"></a>Pod组件中资源引入方式</h3><p>在上文中已经提及了Pod组件中资源引入是在podspec文件中配置 <strong>resource_bundles</strong> 或者 <strong>resources</strong> 参数来实现的。相比于 <strong>resources</strong> 配置文件路径的方式，<strong>resource_bundles</strong> 是配置字典的方式来指定具体的Bundle，从表象上看这会额外创建一个Bundle来存放指定的资源，更具整理规范性，但实际内部机制也和使用 <strong>resources</strong> 配置方式不同。Cocoapods官方已经不建议使用 <strong>resources</strong> 参数，而是强列推荐使用 <strong>resource_bundles</strong> 配置资源文件，详细原因分析见：<a href="https://vongloo.me/2018/03/17/Pod-Resource/" target="_blank" rel="noopener">Pod 中资源引入方式对比</a>。</p>
+<p>可以将图片、Xib等资源存放在Bundle中，使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># source_files包含的所有文件会被发布到Cocoapods中，引用的人可以看到这些文件。</span><br><span class="line"># &quot;/**/&quot; 表示所有子文件夹，“*.&#123;文件后缀&#125;” 代表所有符合后缀名的文件，文件路径是基于podspec文件的</span><br><span class="line">spec.source_files  = &quot;WSEducation/WSEducation/**/*.&#123;h,m,swift&#125;&quot;</span><br><span class="line"></span><br><span class="line">spec.resource_bundles = &#123;</span><br><span class="line">  &apos;WSEducationRes&apos; =&gt; [&apos;WSEducation/WSEducation/WSEducation.xcassets&apos;, &apos;WSEducation/WSEducation/**/*.&#123;xib&#125;&apos;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对Pod Framework的Bundle中的资源获取，主要是获取到这个Bundle的的路径，使用正确的Bundle路径才能获取到资源。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WSEducation 公共方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WSEducation</span>: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 获得resBundle</span></span><br><span class="line">    <span class="meta">@objc</span> <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">resBundle</span><span class="params">()</span></span> -&gt; <span class="type">Bundle?</span> &#123;</span><br><span class="line">        <span class="comment">// 获得Module的Bundle</span></span><br><span class="line">        <span class="keyword">let</span> moduleBundle = <span class="type">Bundle</span>(<span class="keyword">for</span>: <span class="type">WSEducation</span>.<span class="keyword">self</span>)</span><br><span class="line">        <span class="comment">// 获得Module的资源Bundle的路径</span></span><br><span class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> resBundleUrl = moduleBundle.url(forResource: <span class="string">"WSEducationRes"</span>, withExtension: <span class="string">"bundle"</span>) <span class="keyword">else</span> &#123; <span class="keyword">return</span> moduleBundle &#125;</span><br><span class="line">        <span class="comment">// 获得Module的资源Bundle</span></span><br><span class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> resBundle = <span class="type">Bundle</span>(url: resBundleUrl) <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="literal">nil</span> &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> resBundle</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取VC</span></span><br><span class="line"><span class="keyword">let</span> <span class="type">VC</span> = <span class="type">TestViewController</span>(nibName: <span class="string">"TestViewController"</span>, bundle: <span class="type">WSEducation</span>.resBundle())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取图片</span></span><br><span class="line">imageView.image = <span class="type">UIImage</span>(named: <span class="string">"WSCommonAliIcon"</span>, <span class="keyword">in</span>: <span class="type">WSEducation</span>.resBundle(), compatibleWith: <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取Xib</span></span><br><span class="line"><span class="keyword">self</span>.controlViewForEmbedded = <span class="type">EasyPlayerUtils</span>.resBundle()!.loadNibNamed(<span class="type">String</span>(describing: <span class="type">EasyPlayerControlView</span>.<span class="keyword">self</span>), owner: <span class="literal">nil</span>, options: <span class="literal">nil</span>)?.first <span class="keyword">as</span>? <span class="type">EasyPlayerControlView</span></span><br></pre></td></tr></table></figure>
+<h3 id="Pod组件的解耦"><a href="#Pod组件的解耦" class="headerlink" title="Pod组件的解耦"></a>Pod组件的解耦</h3><p>Pod组件的解耦我们使用Target-Action方案，工具使用 <strong>CTMediator</strong>，这里进行简单的思路分析和使用说明。</p>
+<h4 id="调用方式"><a href="#调用方式" class="headerlink" title="调用方式"></a>调用方式</h4><ul>
+<li>整体架构组件化方案分为两种调用方式，远程调用和本地调用，对于两个不同的调用方式分别对应两个接口。</li>
+<li>远程调用通过AppDelegate代理方法传递到当前应用后，调用远程接口并在内部做一些处理，处理完成后会在远程接口内部调用本地接口，以实现本地调用为远程调用服务。</li>
+<li>本地调用由performTarget:action:params:方法负责，但调用方一般不直接调用performTarget:方法。CTMediator会对外提供明确参数和方法名的方法，在方法内部调用performTarget:方法和参数的转换。</li>
+</ul>
+<h4 id="架构设计思路"><a href="#架构设计思路" class="headerlink" title="架构设计思路"></a>架构设计思路</h4><ul>
+<li>通过CTMediator类实现组件化，在此类中对外提供明确参数类型的接口，接口内部通过performTarget方法调用服务方组件的Target、Action。</li>
+<li>由于CTMediator类的调用是通过runtime主动发现服务的，所以服务方对此类是完全解耦的。</li>
+<li>但如果CTMediator类对外提供的方法都放在此类中，将会对CTMediator造成极大的负担和代码量。</li>
+<li>解决方法就是对每个服务方组件创建一个CTMediator的Category（OC）或Extension（Swift），并将对服务方的performTarget调用放在对应的Category和Extension中，这些Category和Extension都属于CTMediator中间件，从而实现了感官上的接口分离。</li>
+</ul>
+<h4 id="组件化实现细节"><a href="#组件化实现细节" class="headerlink" title="组件化实现细节"></a>组件化实现细节</h4><ul>
+<li>对于服务方的组件来说，每个组件都提供一个或多个Target类，在Target类中声明Action方法。</li>
+<li>Target类是当前组件对外提供的一个“服务类”，Target将当前组件中所有的服务都定义在里面，CTMediator通过runtime主动发现服务。</li>
+<li>在Target中的所有Action方法，都只有一个字典参数，所以可以传递的参数很灵活，这也是casatwy提出的去Model化的概念。</li>
+<li>在Action的方法实现中，对传进来的字典参数进行解析，再调用组件内部的类和方法。</li>
+</ul>
+<h4 id="CTMediator组件化使用说明"><a href="#CTMediator组件化使用说明" class="headerlink" title="CTMediator组件化使用说明"></a>CTMediator组件化使用说明</h4><p>以播放器组件 <strong><code>EasyPlayer</code></strong> 为例，它的对外接口组件是 <strong><code>EasyPlayer_Extension</code></strong>，通过这个对外接口组件使用 <strong><code>EasyPlayer</code></strong> 。具体实现如下：</p>
+<p><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_48_43.png" alt="2019-04-01_4_48_43"></p>
+<p><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_45_02.png" alt="2019-04-01_4_45_02"></p>
+<p><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-04-01_4_47_31.png" alt="2019-04-01_4_47_31"></p>
+<h3 id="Pod组件发布"><a href="#Pod组件发布" class="headerlink" title="Pod组件发布"></a>Pod组件发布</h3><p>在开发和调试阶段，需要使用podspec文件中的 <strong>发布源文件包的方式</strong> 才能看到源码；在准备发布时则需要注释podspec文件中的 <strong>发布源文件包的方式</strong> ，放开对 <strong>发布二进制包Pod的方式</strong> 的注释，再运行组件工程中的 <em>upload.sh</em> 文件来发布二进制包形式的Pod库。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/组件化/" rel="tag"># 组件化</a>
+          
+            <a href="/tags/Cocoapods/" rel="tag"># Cocoapods</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/" rel="next" title="Cocoapods实现iOS组件化之自建Framework方式（下）">
+                <i class="fa fa-chevron-left"></i> Cocoapods实现iOS组件化之自建Framework方式（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Nevermore</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地多Git账号配置"><span class="nav-number">2.1.</span> <span class="nav-text">本地多Git账号配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Git多账号配置步骤"><span class="nav-number">2.1.1.</span> <span class="nav-text">Git多账号配置步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git多账号使用"><span class="nav-number">2.1.2.</span> <span class="nav-text">Git多账号使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode工程自动配置文件创建"><span class="nav-number">2.2.</span> <span class="nav-text">Xcode工程自动配置文件创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件说明"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置文件说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConfigPod使用"><span class="nav-number">2.2.2.</span> <span class="nav-text">ConfigPod使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pod组件工程搭建"><span class="nav-number">3.</span> <span class="nav-text">Pod组件工程搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod调试模式组件工程搭建"><span class="nav-number">3.1.</span> <span class="nav-text">Pod调试模式组件工程搭建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pod组件工程说明和使用"><span class="nav-number">4.</span> <span class="nav-text">Pod组件工程说明和使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PodSpec文件说明"><span class="nav-number">4.1.</span> <span class="nav-text">PodSpec文件说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod组件中Swift和OC混编"><span class="nav-number">4.2.</span> <span class="nav-text">Pod组件中Swift和OC混编</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pod中Swift如何引用OC文件"><span class="nav-number">4.2.1.</span> <span class="nav-text">pod中Swift如何引用OC文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod中OC如何引用Swift文件"><span class="nav-number">4.2.2.</span> <span class="nav-text">pod中OC如何引用Swift文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod组件中资源引入方式"><span class="nav-number">4.3.</span> <span class="nav-text">Pod组件中资源引入方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod组件的解耦"><span class="nav-number">4.4.</span> <span class="nav-text">Pod组件的解耦</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#调用方式"><span class="nav-number">4.4.1.</span> <span class="nav-text">调用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#架构设计思路"><span class="nav-number">4.4.2.</span> <span class="nav-text">架构设计思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组件化实现细节"><span class="nav-number">4.4.3.</span> <span class="nav-text">组件化实现细节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CTMediator组件化使用说明"><span class="nav-number">4.4.4.</span> <span class="nav-text">CTMediator组件化使用说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod组件发布"><span class="nav-number">4.5.</span> <span class="nav-text">Pod组件发布</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nevermore</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

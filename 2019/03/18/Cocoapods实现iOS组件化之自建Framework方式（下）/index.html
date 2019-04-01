@@ -98,34 +98,34 @@
 
 
 
-  <meta name="description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。 私有库种类私有库分为两种，本文实现第二种：  第一种pod下来的组件代码完全公开，就是在工程里面是可以看到组件代码实现。 第二种pod下来的组件代码只能看见头文件，内部实现不能查看。">
-<meta name="keywords" content="Swift,Cocoapods">
+  <meta name="description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。">
+<meta name="keywords" content="组件化,Cocoapods">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用">
-<meta property="og:url" content="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/index.html">
+<meta property="og:title" content="Cocoapods实现iOS组件化之自建Framework方式（下）">
+<meta property="og:url" content="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/index.html">
 <meta property="og:site_name" content="Nevermore&#39;s Blog">
-<meta property="og:description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。 私有库种类私有库分为两种，本文实现第二种：  第一种pod下来的组件代码完全公开，就是在工程里面是可以看到组件代码实现。 第二种pod下来的组件代码只能看见头文件，内部实现不能查看。">
+<meta property="og:description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_20_50_58.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_9_42_51.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_8_32_53.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_11_39_17.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_11_42_58.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_11_22_33.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_2_33_48.png">
-<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_2_42_44.png">
-<meta property="og:updated_time" content="2019-03-19T07:08:07.561Z">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_20_50_58.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_9_42_51.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_8_32_53.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_11_39_17.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_11_42_58.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_11_22_33.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_2_33_48.png">
+<meta property="og:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_2_42_44.png">
+<meta property="og:updated_time" content="2019-03-25T03:40:56.341Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用">
-<meta name="twitter:description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。 私有库种类私有库分为两种，本文实现第二种：  第一种pod下来的组件代码完全公开，就是在工程里面是可以看到组件代码实现。 第二种pod下来的组件代码只能看见头文件，内部实现不能查看。">
-<meta name="twitter:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_20_50_58.png">
+<meta name="twitter:title" content="Cocoapods实现iOS组件化之自建Framework方式（下）">
+<meta name="twitter:description" content="前言在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。">
+<meta name="twitter:image" content="https://nevermoregodlike.github.io/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_20_50_58.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/">
+  <link rel="canonical" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/">
 
 
 
@@ -135,7 +135,7 @@
   };
 </script>
 
-  <title>Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用 | Nevermore's Blog</title>
+  <title>Cocoapods实现iOS组件化之自建Framework方式（下） | Nevermore's Blog</title>
   
 
 
@@ -338,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/">
+    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Nevermore">
@@ -355,7 +355,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用
+          <h1 class="post-title" itemprop="name headline">Cocoapods实现iOS组件化之自建Framework方式（下）
 
               
             
@@ -398,7 +398,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-19 15:08:07" itemprop="dateModified" datetime="2019-03-19T15:08:07+08:00">2019-03-19</time>
+                <time title="修改时间：2019-03-25 11:40:56" itemprop="dateModified" datetime="2019-03-25T11:40:56+08:00">2019-03-25</time>
               
             
           </span>
@@ -451,13 +451,13 @@
 
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。</p>
+<a id="more"></a>
 <h3 id="私有库种类"><a href="#私有库种类" class="headerlink" title="私有库种类"></a>私有库种类</h3><p>私有库分为两种，本文实现第二种：</p>
 <ul>
 <li>第一种pod下来的组件代码完全公开，就是在工程里面是可以看到组件代码实现。</li>
 <li>第二种pod下来的组件代码只能看见头文件，内部实现不能查看。</li>
 </ul>
-<a id="more"></a>
-<p><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_20_50_58.png" alt="2019-03-18_20_50_58"></p>
+<p><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_20_50_58.png" alt="2019-03-18_20_50_58"></p>
 <h3 id="用到的几个远程库"><a href="#用到的几个远程库" class="headerlink" title="用到的几个远程库"></a>用到的几个远程库</h3><p>iOS组件化实现基本基于cocoapods，为了实现上文提到的第二种私有库，需要自行创建三个远程库，分别是：</p>
 <ul>
 <li><strong><code>代码仓库</code></strong>： 将组件源代码和资源文件存放在一个远程库中，这个库叫代码仓库，是真正放置组件代码的地方。</li>
@@ -475,16 +475,16 @@
 <li>第五步验证podspec文件成功后发布到Cocoapods中；</li>
 <li>第六步在项目中配置podfile来引用该远程库。</li>
 </ol>
-<h2 id="制作远程私有库"><a href="#制作远程私有库" class="headerlink" title="制作远程私有库"></a>制作远程私有库</h2><h3 id="创建远程库，做好关联"><a href="#创建远程库，做好关联" class="headerlink" title="创建远程库，做好关联"></a>创建远程库，做好关联</h3><h4 id="创建GitHub远程库"><a href="#创建GitHub远程库" class="headerlink" title="创建GitHub远程库"></a>创建GitHub远程库</h4><p>1、注册一个GitHub账号，创建一个<strong>代码仓库</strong> <strong><code>iOSCodeRepo</code></strong> 如下：<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_9_42_51.png" alt="2019-03-18_9_42_51"></p>
-<p>2、同样的方式创建<strong>二进制库</strong> <strong><code>iOSModulesRepo</code></strong> 和 <strong>私有仓库</strong> <strong><code>iOSSpecs</code></strong>。<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_8_32_53.png" alt="2019-03-19_8_32_53"></p>
+<h2 id="制作远程私有库"><a href="#制作远程私有库" class="headerlink" title="制作远程私有库"></a>制作远程私有库</h2><h3 id="创建远程库，做好关联"><a href="#创建远程库，做好关联" class="headerlink" title="创建远程库，做好关联"></a>创建远程库，做好关联</h3><h4 id="创建GitHub远程库"><a href="#创建GitHub远程库" class="headerlink" title="创建GitHub远程库"></a>创建GitHub远程库</h4><p>1、注册一个GitHub账号，创建一个<strong>代码仓库</strong> <strong><code>iOSCodeRepo</code></strong> 如下：<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_9_42_51.png" alt="2019-03-18_9_42_51"></p>
+<p>2、同样的方式创建<strong>二进制库</strong> <strong><code>iOSModulesRepo</code></strong> 和 <strong>私有仓库</strong> <strong><code>iOSSpecs</code></strong>。<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_8_32_53.png" alt="2019-03-19_8_32_53"></p>
 <h4 id="关联远程库和本地库"><a href="#关联远程库和本地库" class="headerlink" title="关联远程库和本地库"></a>关联远程库和本地库</h4><p>1、将我们自己创建的 <strong>私有仓库</strong> <strong><code>iOSSpecs</code></strong> 放置在cocoapods管理的仓库下。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.cocoapods/repos</span><br><span class="line">$ pod repo add iOSSpecs https://github.com/********/iOSSpecs.git</span><br></pre></td></tr></table></figure>
 <p>2、因为我们上一章已经在本地制作好了多组件工程Demo，现在只需将这个工程和GitHub上创建的远程 <strong><code>代码仓库</code></strong> 关联起来即可。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 进入Demo路径</span><br><span class="line">$ <span class="built_in">cd</span> ....</span><br><span class="line"></span><br><span class="line">// 如果本地有多个GitHub账号，需要配置这个仓库的GitHub账号</span><br><span class="line">$ git config user.name <span class="string">"********"</span></span><br><span class="line">$ git config user.email <span class="string">"**********@**.com"</span></span><br><span class="line"></span><br><span class="line">// 初始化本地为git仓库</span><br><span class="line">$ git init </span><br><span class="line">// 将这个本地仓库和远程git仓库关联起来</span><br><span class="line">$ git remote add origin https://github.com/*********/iOSCodeRepo.git</span><br><span class="line"></span><br><span class="line">// 先将远程仓库中的代码拉取到本地，如果本地已经有提交到暂存区的代码的话，</span><br><span class="line">   需要用“git pull --rebase origin master”命令做合并</span><br><span class="line">$ git pull origin master   //第一次后可以用git pull</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这时先使用一个<strong>小Tips：</strong> 按下面的步骤将.DS_Store文件添加到推送忽略文件中，这是Mac的路径标记文件，不需要做推送。后面创建的本地远程库都做下面的处理。</p>
-<p>首先，键盘使用 <code>command+shift+.</code> 可以显示隐藏文件如下：<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_11_39_17.png" alt="2019-03-18_11_39_17"></p>
-<p>然后，编辑隐藏文件 <strong>.gitignore</strong>：<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-18_11_42_58.png" alt="2019-03-18_11_42_58"></p>
+<p>首先，键盘使用 <code>command+shift+.</code> 可以显示隐藏文件如下：<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_11_39_17.png" alt="2019-03-18_11_39_17"></p>
+<p>然后，编辑隐藏文件 <strong>.gitignore</strong>：<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-18_11_42_58.png" alt="2019-03-18_11_42_58"></p>
 </blockquote>
 <p>继续下一步的操作：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 查看和提交所有代码到远程库</span><br><span class="line">$ git status</span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"第一次提交"</span></span><br><span class="line">$ git push -u origin master	//第一次后可以用git push</span><br></pre></td></tr></table></figure>
@@ -496,7 +496,7 @@
 <p>1、进入 <strong>二进制库</strong> <strong><code>iOSModulesRepo</code></strong> 的本地路径，创建一个 <strong>HTSSdk</strong> 文件夹，将制作的组件二进制包 <strong>HTSSdk.framework</strong> 放进去</p>
 <p>2、在<strong><code>iOSModulesRepo</code></strong> 的路径下创建PodSpec文件 <strong>HTSSdk.podspec</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .../iOSModulesRepo</span><br><span class="line">$ pod spec create HTSSdk</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_11_22_33.png" alt="2019-03-19_11_22_33"></p>
+<p><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_11_22_33.png" alt="2019-03-19_11_22_33"></p>
 <p>3、编辑 <strong>HTSSdk.podspec</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">#  Be sure to run `pod spec lint HTSSdk.podspec&apos; to ensure this is a</span><br><span class="line">#  valid spec and to remove all comments including this before submitting the spec.</span><br><span class="line">#</span><br><span class="line">#  To learn more about Podspec attributes see https://docs.cocoapods.org/specification.html</span><br><span class="line">#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/</span><br><span class="line">#</span><br><span class="line"></span><br><span class="line">Pod::Spec.new do |spec|</span><br><span class="line"></span><br><span class="line">  # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.name         = &quot;HTSSdk&quot;        # Pod名称</span><br><span class="line">  spec.version      = &quot;1.0.6&quot;         # Pod版本</span><br><span class="line">  spec.summary      = &quot;HTSSdk组件&quot;</span><br><span class="line">  spec.description      = &lt;&lt;-DESC</span><br><span class="line">                        组件工程打包、上传Cocoapods测试</span><br><span class="line">                       DESC</span><br><span class="line">  spec.homepage     = &quot;https://github.com/BakWisdomSchool&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.license      = &#123; :type =&gt; &apos;MIT&apos;, :file =&gt; &apos;LICENSE&apos; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.author             = &#123; &quot;BakWisdomSchool&quot; =&gt; &quot;bakwisdomschool@163.com&quot; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.platform     = :ios, &quot;9.0&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.source       = &#123; :git =&gt; &quot;https://github.com/BakWisdomSchool/iOSModulesRepo.git&quot;, :tag =&gt; &quot;#&#123;spec.version&#125;&quot; &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  # ――― Use ARC ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.requires_arc = true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # 所有需要引用的文件都要添加进来 /**/表示所有文件夹 *.&#123;文件后缀&#125;代表所有符合后缀名的文件，文件路径是基于podspec文件的</span><br><span class="line">  spec.source_files  = &quot;HTSSdk/#&#123;spec.name&#125;.framework/Headers/**/*.&#123;h,m,swift&#125;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Swift Version ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.swift_version = &quot;4.1&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.resources = &quot;HTSSdk/#&#123;spec.name&#125;.framework/#&#123;spec.name&#125;_res.bundle&quot;   # 组件framework的资源</span><br><span class="line">  spec.preserve_paths = &quot;HTSSdk/*.framework&quot;          # pod要加preserve_paths预加载路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # pod依赖的苹果的framework，比如UIKit，SystemConfiguration等等</span><br><span class="line">  # spec.framework  = &quot;SomeFramework&quot;     </span><br><span class="line">  # spec.frameworks = &quot;SomeFramework&quot;, &quot;AnotherFramework&quot;</span><br><span class="line"></span><br><span class="line">  # pod依赖的苹果官方的库，也就是类似libstdc++.a ,libsqlite.a 等等的a文件</span><br><span class="line">  # spec.library   = &quot;iconv&quot;</span><br><span class="line">  # spec.libraries = &quot;iconv&quot;, &quot;xml2&quot;</span><br><span class="line"></span><br><span class="line">  # pod依赖的自己的framework，比如QQSDK的TencentOpenAPI.framework;</span><br><span class="line">  spec.vendored_frameworks = &quot;HTSSdk/**/*.&#123;framework&#125;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # pod依赖的第三方库</span><br><span class="line">  # spec.dependency &quot;JSONKit&quot;, &quot;~&gt; 1.4&quot;</span><br><span class="line">  spec.dependency &quot;MJRefresh&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>4、推送上述的 <strong><code>iOSModulesRepo</code></strong> 中的文件修改到远程库，并打上Tag。</p>
@@ -510,11 +510,11 @@
 </blockquote>
 <p>5、验证podspec，发布pod</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .../iOSModulesRepo</span><br><span class="line"></span><br><span class="line">// 本地验证Spec，只有验证成功后，下面的发布才会成功，有error要解决掉</span><br><span class="line">$ pod lib lint --private</span><br><span class="line"></span><br><span class="line">// 远程验证Spec，只有验证成功后，下面的发布才会成功，有error要解决掉</span><br><span class="line">$ pod spec lint --no-clean</span><br><span class="line"></span><br><span class="line">// 发布到Cocoapods</span><br><span class="line">$ pod repo push iOSSpecs HTSSdk.podspec --verbose --allow-warnings --use-libraries</span><br></pre></td></tr></table></figure>
-<h2 id="使用远程私有库"><a href="#使用远程私有库" class="headerlink" title="使用远程私有库"></a>使用远程私有库</h2><h3 id="搜索远程私有库"><a href="#搜索远程私有库" class="headerlink" title="搜索远程私有库"></a>搜索远程私有库</h3><p>讲到这里，远程私有库的创建已经完成，可执行 <code>Pod Search HTSSdk</code> 查看：<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_2_33_48.png" alt="2019-03-19_2_33_48"></p>
+<h2 id="使用远程私有库"><a href="#使用远程私有库" class="headerlink" title="使用远程私有库"></a>使用远程私有库</h2><h3 id="搜索远程私有库"><a href="#搜索远程私有库" class="headerlink" title="搜索远程私有库"></a>搜索远程私有库</h3><p>讲到这里，远程私有库的创建已经完成，可执行 <code>Pod Search HTSSdk</code> 查看：<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_2_33_48.png" alt="2019-03-19_2_33_48"></p>
 <blockquote>
 <p><strong>注意：</strong> 若搜索不到刚才发布成功的Pod，去到本地 <code>~/Library/Caches/CocoaPods/</code> 路径下，删除 <strong>search_index.json</strong> 文件，这个文件是 pod search 搜索时的缓存文件，再打开终端重新使用 <code>pod search</code> 搜索你的框架，这时 <strong>search_index.json</strong> 缓存文件会被重新生成，你的框架就可以搜索出来了。</p>
 </blockquote>
-<h3 id="使用制作的远程Pod库"><a href="#使用制作的远程Pod库" class="headerlink" title="使用制作的远程Pod库"></a>使用制作的远程Pod库</h3><p>创建一个新Cocoapods工程，在它的Podfile文件中引用 <code>HTSSdk</code> 如下：<br><img src="/images/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/2019-03-19_2_42_44.png" alt="2019-03-19_2_42_44"></p>
+<h3 id="使用制作的远程Pod库"><a href="#使用制作的远程Pod库" class="headerlink" title="使用制作的远程Pod库"></a>使用制作的远程Pod库</h3><p>创建一个新Cocoapods工程，在它的Podfile文件中引用 <code>HTSSdk</code> 如下：<br><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_2_42_44.png" alt="2019-03-19_2_42_44"></p>
 <blockquote>
 <p><strong>注意：</strong> 一定要添加远程 <strong>私有仓库</strong> 的地址</p>
 </blockquote>
@@ -543,7 +543,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Swift/" rel="tag"># Swift</a>
+            <a href="/tags/组件化/" rel="tag"># 组件化</a>
           
             <a href="/tags/Cocoapods/" rel="tag"># Cocoapods</a>
           
@@ -558,8 +558,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/18/Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用/" rel="next" title="Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用">
-                <i class="fa fa-chevron-left"></i> Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用
+              <a href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（上）/" rel="next" title="Cocoapods实现iOS组件化之自建Framework方式（上）">
+                <i class="fa fa-chevron-left"></i> Cocoapods实现iOS组件化之自建Framework方式（上）
               </a>
             
           </div>
@@ -567,6 +567,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/" rel="prev" title="Cocoapods实现iOS组件化之Pod打包Framework方式">
+                Cocoapods实现iOS组件化之Pod打包Framework方式 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -635,7 +639,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

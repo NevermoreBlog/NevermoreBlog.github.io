@@ -325,7 +325,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/">
+    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Nevermore">
@@ -345,7 +345,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/" class="post-title-link" itemprop="url">Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用</a>
+                <a href="/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/" class="post-title-link" itemprop="url">Cocoapods实现iOS组件化之Pod打包Framework方式</a>
               
             
           </h1>
@@ -370,7 +370,7 @@
                 
               
 
-              <time title="创建时间：2019-03-18 21:10:33" itemprop="dateCreated datePublished" datetime="2019-03-18T21:10:33+08:00">2019-03-18</time>
+              <time title="创建时间：2019-03-25 10:10:33" itemprop="dateCreated datePublished" datetime="2019-03-25T10:10:33+08:00">2019-03-25</time>
             
 
             
@@ -387,7 +387,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-19 15:08:07" itemprop="dateModified" datetime="2019-03-19T15:08:07+08:00">2019-03-19</time>
+                <time title="修改时间：2019-04-01 16:56:08" itemprop="dateModified" datetime="2019-04-01T16:56:08+08:00">2019-04-01</time>
               
             
           </span>
@@ -440,16 +440,11 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。</p>
-<h3 id="私有库种类"><a href="#私有库种类" class="headerlink" title="私有库种类"></a>私有库种类</h3><p>私有库分为两种，本文实现第二种：</p>
-<ul>
-<li>第一种pod下来的组件代码完全公开，就是在工程里面是可以看到组件代码实现。</li>
-<li>第二种pod下来的组件代码只能看见头文件，内部实现不能查看。</li>
-</ul>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上两个章节中，已经对<strong><code>自行建立Framework工程</code></strong>作为组建工程的方式进行说明，已经实现了组件化，但也有一些局限性。这篇文章在其基础上再一次进行组件化探讨，并从保证调试便利、提高实际开发效率和增强扩展性等方面进行考虑，最后选择了 <strong><code>使用Pod打包Framework</code></strong> 的方式进行组件化，使用了简单的脚本配置工程和发布Pod。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/03/18/Cocoapods实现iOS组件化开发（下）-组件的Cocoapods远程私有库创建及使用/#more" rel="contents">
+              <a class="btn" href="/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -509,7 +504,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用/">
+    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Nevermore">
@@ -529,7 +524,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/03/18/Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用/" class="post-title-link" itemprop="url">Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用</a>
+                <a href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/" class="post-title-link" itemprop="url">Cocoapods实现iOS组件化之自建Framework方式（下）</a>
               
             
           </h1>
@@ -554,7 +549,7 @@
                 
               
 
-              <time title="创建时间：2019-03-18 21:09:33" itemprop="dateCreated datePublished" datetime="2019-03-18T21:09:33+08:00">2019-03-18</time>
+              <time title="创建时间：2019-03-18 21:10:33" itemprop="dateCreated datePublished" datetime="2019-03-18T21:10:33+08:00">2019-03-18</time>
             
 
             
@@ -571,7 +566,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-19 15:51:26" itemprop="dateModified" datetime="2019-03-19T15:51:26+08:00">2019-03-19</time>
+                <time title="修改时间：2019-03-25 11:40:56" itemprop="dateModified" datetime="2019-03-25T11:40:56+08:00">2019-03-25</time>
               
             
           </span>
@@ -624,12 +619,190 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着项目功能越来越多，工程也会越来越臃肿，为了更好的进行项目管理、测试和开发，工程就有了组件化的需求。这一系列文章将从创建模块开始讲述如何实现项目的组件化开发，包含整体框架和诸多细节问题。</p>
-<p>Demo是Swift项目，使用pod对多项目进行管理。组件使用Framework形式，有Swift和OC混编。这一章节从创建Framework、pod管理组件、组件之间的沟通等方面进行统一的整理。<br>先看一下工程最终的效果。</p>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一章节中，已经搭建好了本地多组件工作区，并可以在本地进行开发和调试，这一章节将使用之前的Demo中创建的组件详细说明Cocoapods远程私有库的创建过程和使用。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/03/18/Cocoapods实现iOS组件化开发（上）-本地多组件工作区的搭建和使用/#more" rel="contents">
+              <a class="btn" href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://nevermoregodlike.github.io/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（上）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Nevermore">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Nevermore's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（上）/" class="post-title-link" itemprop="url">Cocoapods实现iOS组件化之自建Framework方式（上）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-18 21:09:33" itemprop="dateCreated datePublished" datetime="2019-03-18T21:09:33+08:00">2019-03-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-25 11:40:44" itemprop="dateModified" datetime="2019-03-25T11:40:44+08:00">2019-03-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着项目功能越来越多，工程也会越来越臃肿，为了更好的进行项目管理、测试和开发，工程就有了组件化的需求。如何将当前臃肿的工程逐步实现组件化就是这一系列文章将要解决的问题。简单来说，组件化即是将iOS功能模块打包成为Framework库文件，然后整合成为应用的过程。这一系列文章将对如何实现项目的组件化开发进行详细说明，包含诸多细节问题。</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（上）/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -867,7 +1040,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
