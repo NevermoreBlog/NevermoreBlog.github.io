@@ -509,7 +509,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .../iOSModulesRepo</span><br><span class="line">$ pod spec create HTSSdk</span><br></pre></td></tr></table></figure>
 <p><img src="/images/Cocoapods实现iOS组件化之自建Framework方式（下）/2019-03-19_11_22_33.png" alt="2019-03-19_11_22_33"></p>
 <p>3、编辑 <strong>HTSSdk.podspec</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">#  Be sure to run `pod spec lint HTSSdk.podspec&apos; to ensure this is a</span><br><span class="line">#  valid spec and to remove all comments including this before submitting the spec.</span><br><span class="line">#</span><br><span class="line">#  To learn more about Podspec attributes see https://docs.cocoapods.org/specification.html</span><br><span class="line">#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/</span><br><span class="line">#</span><br><span class="line"></span><br><span class="line">Pod::Spec.new do |spec|</span><br><span class="line"></span><br><span class="line">  # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.name         = &quot;HTSSdk&quot;        # Pod名称</span><br><span class="line">  spec.version      = &quot;1.0.6&quot;         # Pod版本</span><br><span class="line">  spec.summary      = &quot;HTSSdk组件&quot;</span><br><span class="line">  spec.description      = &lt;&lt;-DESC</span><br><span class="line">                        组件工程打包、上传Cocoapods测试</span><br><span class="line">                       DESC</span><br><span class="line">  spec.homepage     = &quot;https://github.com/BakWisdomSchool&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.license      = &#123; :type =&gt; &apos;MIT&apos;, :file =&gt; &apos;LICENSE&apos; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.author             = &#123; &quot;BakWisdomSchool&quot; =&gt; &quot;bakwisdomschool@163.com&quot; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.platform     = :ios, &quot;9.0&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.source       = &#123; :git =&gt; &quot;https://github.com/BakWisdomSchool/iOSModulesRepo.git&quot;, :tag =&gt; &quot;#&#123;spec.version&#125;&quot; &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  # ――― Use ARC ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.requires_arc = true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # 所有需要引用的文件都要添加进来 /**/表示所有文件夹 *.&#123;文件后缀&#125;代表所有符合后缀名的文件，文件路径是基于podspec文件的</span><br><span class="line">  spec.source_files  = &quot;HTSSdk/#&#123;spec.name&#125;.framework/Headers/**/*.&#123;h,m,swift&#125;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Swift Version ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.swift_version = &quot;4.1&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  spec.resources = &quot;HTSSdk/#&#123;spec.name&#125;.framework/#&#123;spec.name&#125;_res.bundle&quot;   # 组件framework的资源</span><br><span class="line">  spec.preserve_paths = &quot;HTSSdk/*.framework&quot;          # pod要加preserve_paths预加载路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # pod依赖的苹果的framework，比如UIKit，SystemConfiguration等等</span><br><span class="line">  # spec.framework  = &quot;SomeFramework&quot;     </span><br><span class="line">  # spec.frameworks = &quot;SomeFramework&quot;, &quot;AnotherFramework&quot;</span><br><span class="line"></span><br><span class="line">  # pod依赖的苹果官方的库，也就是类似libstdc++.a ,libsqlite.a 等等的a文件</span><br><span class="line">  # spec.library   = &quot;iconv&quot;</span><br><span class="line">  # spec.libraries = &quot;iconv&quot;, &quot;xml2&quot;</span><br><span class="line"></span><br><span class="line">  # pod依赖的自己的framework，比如QQSDK的TencentOpenAPI.framework;</span><br><span class="line">  spec.vendored_frameworks = &quot;HTSSdk/**/*.&#123;framework&#125;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span><br><span class="line">  # pod依赖的第三方库</span><br><span class="line">  # spec.dependency &quot;JSONKit&quot;, &quot;~&gt; 1.4&quot;</span><br><span class="line">  spec.dependency &quot;MJRefresh&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Be sure to run `pod spec lint HTSSdk.podspec' to ensure this is a</span></span><br><span class="line"><span class="comment">#  valid spec and to remove all comments including this before submitting the spec.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  To learn more about Podspec attributes see https://docs.cocoapods.org/specification.html</span></span><br><span class="line"><span class="comment">#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">Pod::Spec.new do |spec|</span><br><span class="line"></span><br><span class="line">  <span class="comment"># ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">name</span>         = <span class="string">"HTSSdk"</span>        <span class="comment"># Pod名称</span></span><br><span class="line">  spec.<span class="attr">version</span>      = <span class="string">"1.0.6"</span>         <span class="comment"># Pod版本</span></span><br><span class="line">  spec.<span class="attr">summary</span>      = <span class="string">"HTSSdk组件"</span></span><br><span class="line">  spec.<span class="attr">description</span>      = &lt;&lt;-DESC</span><br><span class="line">                        组件工程打包、上传Cocoapods测试</span><br><span class="line">                       DESC</span><br><span class="line">  spec.<span class="attr">homepage</span>     = <span class="string">"https://github.com/BakWisdomSchool"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">license</span>      = &#123; :<span class="attr">type</span> =&gt; 'MIT', :<span class="attr">file</span> =&gt; 'LICENSE' &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">author</span>             = &#123; <span class="string">"BakWisdomSchool"</span> =&gt; <span class="string">"bakwisdomschool@163.com"</span> &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">platform</span>     = :ios, <span class="string">"9.0"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">source</span>       = &#123; :<span class="attr">git</span> =&gt; <span class="string">"https://github.com/BakWisdomSchool/iOSModulesRepo.git"</span>, :<span class="attr">tag</span> =&gt; <span class="string">"#&#123;spec.version&#125;"</span> &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  <span class="comment"># ――― Use ARC ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">requires_arc</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment"># 所有需要引用的文件都要添加进来 /**/表示所有文件夹 *.&#123;文件后缀&#125;代表所有符合后缀名的文件，文件路径是基于podspec文件的</span></span><br><span class="line">  spec.<span class="attr">source_files</span>  = <span class="string">"HTSSdk/#&#123;spec.name&#125;.framework/Headers/**/*.&#123;h,m,swift&#125;"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Swift Version ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">swift_version</span> = <span class="string">"4.1"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  spec.<span class="attr">resources</span> = <span class="string">"HTSSdk/#&#123;spec.name&#125;.framework/#&#123;spec.name&#125;_res.bundle"</span>   <span class="comment"># 组件framework的资源</span></span><br><span class="line">  spec.<span class="attr">preserve_paths</span> = <span class="string">"HTSSdk/*.framework"</span>          <span class="comment"># pod要加preserve_paths预加载路径</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment"># pod依赖的苹果的framework，比如UIKit，SystemConfiguration等等</span></span><br><span class="line">  <span class="comment"># spec.framework  = "SomeFramework"     </span></span><br><span class="line">  <span class="comment"># spec.frameworks = "SomeFramework", "AnotherFramework"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># pod依赖的苹果官方的库，也就是类似libstdc++.a ,libsqlite.a 等等的a文件</span></span><br><span class="line">  <span class="comment"># spec.library   = "iconv"</span></span><br><span class="line">  <span class="comment"># spec.libraries = "iconv", "xml2"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># pod依赖的自己的framework，比如QQSDK的TencentOpenAPI.framework;</span></span><br><span class="line">  spec.<span class="attr">vendored_frameworks</span> = <span class="string">"HTSSdk/**/*.&#123;framework&#125;"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment"># pod依赖的第三方库</span></span><br><span class="line">  <span class="comment"># spec.dependency "JSONKit", "~&gt; 1.4"</span></span><br><span class="line">  spec.dependency <span class="string">"MJRefresh"</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>4、推送上述的 <strong><code>iOSModulesRepo</code></strong> 中的文件修改到远程库，并打上Tag。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .../iOSModulesRepo</span><br><span class="line"></span><br><span class="line">// 将Framework和podspectag推送到远程库</span><br><span class="line">$ git status</span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"第一次提交"</span></span><br><span class="line">$ git push</span><br></pre></td></tr></table></figure>
 <p>打tag：</p>
@@ -546,6 +546,35 @@
     
       
     
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Nevermore 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Nevermore 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
     
 
     
@@ -602,6 +631,10 @@
 
           </div>
           
+
+  
+    <div id="gitalk-container">
+    </div>
 
   
 
@@ -893,7 +926,50 @@
 
 
   
+    
+    
+        
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+        <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+        <script type="text/javascript">
+            const gitalk = new Gitalk({
+            clientID: '',
+            clientSecret: '',
+            repo: 'nevermoregodlike.github.io',
+            owner: 'nevermoregodlike',
+            admin: 'nevermoregodlike'.split(','),
+            pagerDirection: 'first',
+            id: md5(window.location.pathname),
+            distractionFreeMode: false
+            })
+            gitalk.render('gitalk-container')
+        </script>
+        
+    
 
+  
+
+
+
+    
+        
+        <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+        <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+        <script type="text/javascript">
+            const gitalk = new Gitalk({
+            clientID: '',
+            clientSecret: '',
+            repo: 'nevermoregodlike.github.io',
+            owner: 'nevermoregodlike',
+            admin: 'nevermoregodlike'.split(','),
+            pagerDirection: 'first',
+            id: md5(window.location.pathname),
+            distractionFreeMode: false
+            })
+            gitalk.render('gitalk-container')
+        </script>
+        
+    
 
   
 
