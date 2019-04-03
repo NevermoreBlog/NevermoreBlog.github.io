@@ -54,19 +54,22 @@
 <p><strong>注意：</strong><br>    使用 <strong>Https Url</strong> 关联仓库时可能每次上传更新都需要输入密匙的密码，采用 <strong>SSH Url</strong> 和仓库关联。</p>
 </blockquote>
 <p>按上述步骤完成配置以后，以后账号会自动切换。</p>
-<h2 id="Xcode工程自动配置文件创建"><a href="#Xcode工程自动配置文件创建" class="headerlink" title="Xcode工程自动配置文件创建"></a>Xcode工程自动配置文件创建</h2><h3 id="配置文件说明"><a href="#配置文件说明" class="headerlink" title="配置文件说明"></a>配置文件说明</h3><p>为了提高开发效率，可以创建一些配置文件和模板来配置Xcode工程和发布Pod库。</p>
+<h2 id="Xcode工程自动配置文件创建"><a href="#Xcode工程自动配置文件创建" class="headerlink" title="Xcode工程自动配置文件创建"></a>Xcode工程自动配置文件创建</h2><h3 id="配置文件说明"><a href="#配置文件说明" class="headerlink" title="配置文件说明"></a>配置文件说明</h3><p>为了提高开发效率，可以创建一些配置文件和模板动态配置Xcode工程和发布Pod库。</p>
 <p>这里已经创建好了一个 <strong><code>ConfigPod</code></strong> 仓库，其中包含一个  <em>config.sh</em> 文件和一个 <strong>templates</strong> 文件夹。<br><img src="/images/Cocoapods实现iOS组件化之Pod打包Framework方式/2019-03-25_2_37_26.png" alt="2019-03-25_2_37_26"></p>
 <blockquote>
-<p><em>config.sh</em>：运行这个文件会对新建的<strong>Xcode组件工程</strong>进行一系列配置，包括：git的初始化和关联远程仓库、将<strong>templates</strong>中模板文件正对当前Xcode组件工程进行对应修改后复制到Xcode组件工程的相应路径下。</p>
-<p><em>pod.podspec</em>：Xcode组件工程的podspec文件模板，此配置用于将工程打包成Pod组件和发布</p>
-<p><em>Podfile</em>：Xcode组件工程的Podfile文件模板，组件使用Pod第三方库的配置文件</p>
-<p><em>gitignore</em>：自定义gitignore，覆盖工程中的.gitignore，添加git忽略的文件</p>
-<p><em>upload.sh</em>：自动发布组件工程Pod的脚本，在完成所有开发和测试，发布Pod组件时使用</p>
-<p><em>readme.md</em>：自定义readme.md，覆盖工程中的readme.md</p>
-<p><em>FILE_LICENSE</em>：自定义FILE_LICENSE，覆盖工程中的LICENSE</p>
+<p><em>config.sh</em>：运行这个文件会对新建的<strong>Xcode组件工程</strong>进行一系列配置，包括：git的初始化和关联远程仓库；将<strong>templates</strong>中的模板文件先复制到组件工程的相应路径下，再针对当前组件工程进行修改配置。</p>
+<p><em>pod.podspec</em>：Xcode组件工程的podspec文件模板，此配置用于将工程打包成Pod组件和发布，开发时应灵活修改。</p>
+<p><em>Podfile</em>：Xcode组件工程的Podfile文件模板，组件使用Pod第三方库的配置文件。</p>
+<p><em>gitignore</em>：自定义gitignore，覆盖工程中的.gitignore，添加git忽略的文件。</p>
+<p><em>upload.sh</em>：自动发布组件工程Pod的脚本，在完成所有开发和测试，发布Pod组件时使用。</p>
+<p><em>readme.md</em>：自定义readme.md，覆盖工程中的readme.md。</p>
+<p><em>FILE_LICENSE</em>：自定义FILE_LICENSE，覆盖工程中的LICENSE。</p>
 </blockquote>
-<h3 id="ConfigPod使用"><a href="#ConfigPod使用" class="headerlink" title="ConfigPod使用"></a>ConfigPod使用</h3><p>将 <strong><code>ConfigPod</code></strong> 拉取一份在本地，必须和将要进行配置的Xcode组件工程放在同一级路径下，使用终端进入ConfigPod中，执行 <code>./config.sh</code>，然后按照提示完成配置。</p>
-<p>完成配置后可以进入Xcode组件工程查看，后续可以根据自己的需求修改这些文件。</p>
+<h3 id="ConfigPod使用"><a href="#ConfigPod使用" class="headerlink" title="ConfigPod使用"></a>ConfigPod使用</h3><ol>
+<li>将 <strong><code>ConfigPod</code></strong> 拉取一份在本地，必须和将要进行配置的Xcode组件工程放在同一级路径下。</li>
+<li>在组件开发前，运行<em>config.sh</em>文件，按照提示配置完组件工程。</li>
+<li>进入组件工程，查看配置文件，后续开发根据自己的需求修改这些文件。</li>
+</ol>
 <h1 id="Pod组件工程搭建"><a href="#Pod组件工程搭建" class="headerlink" title="Pod组件工程搭建"></a>Pod组件工程搭建</h1><h2 id="Pod调试模式组件工程搭建"><a href="#Pod调试模式组件工程搭建" class="headerlink" title="Pod调试模式组件工程搭建"></a>Pod调试模式组件工程搭建</h2><p>为了便于自定义，在了解了Pod创建库文件之后，选择自行手动进行Pod库的创建和关联。步骤如下：</p>
 <p>1、先登录GitHub账户，创建一个仓库 <strong>iOSSpecsRepo</strong>，作为我们私有Pod的源仓库。再将其放置在cocoapods管理的仓库下。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pod repo add iOSSpecsRepo https://github.com/********/iOSSpecsRepo.git</span><br></pre></td></tr></table></figure>
@@ -163,9 +166,9 @@
 <p><a href="https://vongloo.me/2018/03/17/Pod-Resource/" target="_blank" rel="noopener">Pod 中资源引入方式对比</a></p>
 </blockquote>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Nevermore</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/">https://nevermoregodlike.github.io/2019/03/25/Cocoapods实现iOS组件化之Pod打包Framework方式/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://nevermoregodlike.github.io">Nevermore's Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/组件化/">组件化</a><a class="post-meta__tags" href="/tags/Cocoapods/">Cocoapods</a></div><div class="post-qr-code"><div class="post-qr-code-item"><img class="post-qr-code__img" src="https://i.loli.net/2019/04/02/5ca30e69897a8.jpg"><div class="post-qr-code__desc">微信打赏</div></div><div class="post-qr-code-item"><img class="post-qr-code__img" src="https://i.loli.net/2019/04/02/5ca30e7dcbe6c.jpg"><div class="post-qr-code__desc">支付宝打赏</div></div></div><div class="addthis_inline_share_toolbox pull-right"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ca32f17eca84b9b" async></script><nav id="pagination"><div class="next-post pull-right"><a href="/2019/03/18/Cocoapods实现iOS组件化之自建Framework方式（下）/"><span>Cocoapods实现iOS组件化之自建Framework方式（下）</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == true ? true : false;
-var verify = 'false' == true ? true : false;
+var verify = 'true' == true ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
-var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+var guest_info = 'https://nevermoregodlike.github.io'.split(',').filter(function(item){
   return GUEST_INFO.indexOf(item) > -1
 });
 guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
@@ -176,7 +179,7 @@ window.valine = new Valine({
   appId:'unBqQpHxu88bs3oDBq2zCClu-gzGzoHsz',
   appKey:'hOArQ82278lxPybqL349GBWG',
   placeholder:'Just go go',
-  avatar:'https://i.loli.net/2019/04/02/5ca325e14112a.png',
+  avatar:'mp',
   guest_info:guest_info,
   pageSize:'10',
   lang: 'zh-cn'
